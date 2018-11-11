@@ -2,7 +2,7 @@
 #include "vec3.h"
 #include "ray.h"
 
-bool hit_sphere(const vec3& center, float radius, const ray &r) {
+float hit_sphere(const vec3& center, float radius, const ray &r) {
   // vector from origin to center of sphere
   vec3 oc = r.origin() - center;
   float a = dot(r.direction(), r.direction());
@@ -10,21 +10,35 @@ bool hit_sphere(const vec3& center, float radius, const ray &r) {
   float c = dot(oc, oc) - radius * radius;
   float discriminant = b * b - 4 * a * c;
 
-  return (discriminant > 0);
+  float t;
+
+  if (discriminant < 0) {
+    
+    return -1.0;
+  } else {
+    // solution to the second grade ecuation that tell us where in the sphere
+    //    the ray is going to hit.
+    t = (-b - sqrt(discriminant)) / (2.0 * a);
+    return t;
+  }
+  
 }
 
 vec3 color(const ray& r) {
   // sphere at -1 on z axis of radius 0.5
-  if (hit_sphere(vec3(0,0,-1), 0.5, r)) {
-    return vec3(1, 0, 0);
+  //      we get the point where the sphere.
+  float t = hit_sphere(vec3(0, 0, -1), 0.5, r);
+
+  if(t > 0.0) {
+    vec3 N = unit_vector(r.point_at_parameter(t) -  vec3(0, 0, -1));
+    return 0.5 * vec3(N.x()+1, N.y()+1, N.z()+1);
   }
 
   // makes direction unit_vector -1.0 < y 1.0
   vec3 unit_direction = unit_vector(r.direction());
 
   // 0.0 < t < 1.0
-  float t = 0.5 * (unit_direction.y() + 1.0);
-
+  t = 0.5 * (unit_direction.y() + 1.0);
   // linear interpolation of color between white and blue
   return (1.0 - t) * vec3(1.0, 1.0, 1.0) + t * vec3(0.5, 0.7, 1.0);
 }
