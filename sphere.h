@@ -19,6 +19,7 @@ bool sphere::hit(const ray &r, float tmin, float tmax, hit_record &rec) const {
     float b = dot(oc, r.direction());
     float c = dot(oc, oc) - radius * radius; 
 
+    // simplified cancelling two's from the original equation
     float discriminant = b*b - a*c;
 
     if (discriminant > 0 ) {
@@ -27,7 +28,7 @@ bool sphere::hit(const ray &r, float tmin, float tmax, hit_record &rec) const {
         if (temp < tmax && temp > tmin) {
             rec.t = temp;
             rec.point = r.point_at_parameter(rec.t);
-            rec.normal = (rec.p - center) / radius;
+            rec.normal = (rec.point - center) / radius;
             return true;
         }
 
@@ -36,10 +37,15 @@ bool sphere::hit(const ray &r, float tmin, float tmax, hit_record &rec) const {
         if(temp < tmax && temp > tmin) {
             rec.t = temp;
             rec.point = r.point_at_parameter(rec.t);
-            rec.normal = (rec.p - center) / radius;
+
+            // normal's magnitud and radius magnitud is the same so
+            //  this makes the normal a unit vector.
+            rec.normal = (rec.point - center) / radius;
             return true;
         }
     }
 
     return false;
 }
+
+#endif
