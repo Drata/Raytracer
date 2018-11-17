@@ -3,6 +3,7 @@
 #include "ray.h"
 #include "sphere.h"
 #include "hitablelist.h"
+#include "camera.h"
 
 vec3 color(const ray& r, hitable *world) {
 
@@ -24,13 +25,8 @@ vec3 color(const ray& r, hitable *world) {
 int main() {
   int nx = 200;
   int ny = 100;
+  int ns = 100;
   std::cout << "P3\n" << nx << " " << ny << "\n255\n";
-
-  // screen vectors
-  vec3 lower_left_corner(-2.0, -1.0, -1.0);
-  vec3 horizontal(4.0, 0.0, 0.0);
-  vec3 vertical(0.0, 2.0, 0.0);
-  vec3 origin(0.0, 0.0, 0.0);
 
   // creates the objects of the world
   hitable *objects[2];
@@ -41,25 +37,33 @@ int main() {
 
   hitable *world = new hitable_list(objects, 2);
 
+  // camera
+  camera cam;
 
   // main loop
   for (int j = ny-1; j >= 0; j--) {
     for (int i = 0; i < nx; i++) {
-      // normalizes coordinates
-      float u = float(i) / float(nx);
-      float v = float(j) / float(ny);
+      vec3 col(0, 0, 0);
 
-      // creates ray
-      ray r(origin, lower_left_corner + u * horizontal + v * vertical);
-      
-      vec3 point = r.point_at_parameter(2.0);
-      vec3 col = color(r, world);
+      for (int s=0; s < ns; s++) {
+        // generate random samples for each pixel
+        float u = float(i + drand48()) / float(nx);
+        float v = float(j + drand48()) / float(ny);
 
+        // adds up the colors of the samples
+        ray r = cam.get_ray(u, v);
+        col += color(r, world);
+      }
+
+      // founds the average of the color for that pixel
+      col /= float(ns);
+ 
       // gets color components
       int ir = int(255.99*col[0]);
       int ig = int(255.99*col[1]);
       int ib = int(255.99*col[2]);
 
+      // prints rgb value to svg
       std::cout << ir << " " << ig << " " << ib << "\n";
     }
   }
