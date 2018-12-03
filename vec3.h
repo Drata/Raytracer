@@ -38,6 +38,7 @@ public:
 
   inline void make_unit_vector();
 
+  // variable miembro.
   float e[3];
 };
 
@@ -142,6 +143,20 @@ inline vec3& vec3::operator/=(const float t) {
 
 inline vec3 unit_vector(vec3 v) {
   return v / v.length();
+}
+
+vec3 reflect(const vec3 &v, const vec3 & n) {
+  return v - 2* dot(v, n) * n;
+}
+
+vec3 random_in_unit_sphere() {
+  vec3 random_point;
+
+  do {
+    random_point = 2.0 * vec3(drand48(), drand48(), drand48()) - vec3(1, 1, 1);
+  } while (random_point.squared_length() >= 1.0);
+
+  return random_point;
 }
 
 #endif
