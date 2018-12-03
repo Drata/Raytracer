@@ -14,7 +14,7 @@ enum {
   VERY_HIGH = 10
 };
 
-#define DEFINITION MEDIUM 
+#define DEFINITION HIGH 
 
 vec3 color(const ray& r, hitable *world, int depth) {
 
@@ -47,18 +47,15 @@ int main() {
   std::cout << "P3\n" << nx << " " << ny << "\n255\n";
 
   // creates the objects of the world
-  hitable *objects[7];
+  hitable *objects[4];
 
   // creates two spheres
-  objects[0] = new sphere(vec3(0, 0, -1), 0.5, new metal(vec3(1.0, 1.0, 1.0)));
+  objects[0] = new sphere(vec3(1, 0, -1), 0.5, new metal(vec3(1.0, 1.0, 1.0)));
   objects[1] = new sphere(vec3(0, -100.5, -1), 100, new lambertian(vec3(0.8, 0.8, 0.0)));
-  objects[2] = new sphere(vec3(1, 0, -1), 0.5, new metal(vec3(0.8, 0.6, 0.2)));
-  objects[3] = new sphere(vec3(-1, 0, -1), 0.5, new metal(vec3(0.8, 0.8, 0.8)));
-  objects[4] = new sphere(vec3(0.3+0.5, -0.2, -0.5), 0.3, new lambertian(vec3(0.7, 0.2, 0.9)));
-  objects[5] = new sphere(vec3(0.7+0.5, -0.2, -0.3), 0.3, new lambertian(vec3(0.4, 0.9, 0.0)));
-  objects[6] = new sphere(vec3(0, -0.2, -1), 0.3, new lambertian(vec3(0.4, 1.0, 0.1)));
+  objects[2] = new sphere(vec3(-1, 0, -1), 0.5, new metal(vec3(0.0, 0.0, 0.5)));
+  objects[3] = new sphere(vec3(0, 0, -1), 0.5, new lambertian(vec3(0.15, 0.15, 0.15)));
 
-  hitable *world = new hitable_list(objects, 7);
+  hitable *world = new hitable_list(objects, 4);
 
   // camera
   camera cam;
