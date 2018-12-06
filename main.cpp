@@ -14,7 +14,7 @@ enum {
   VERY_HIGH = 10
 };
 
-#define DEFINITION HIGH 
+#define DEFINITION MEDIUM 
 
 vec3 color(const ray& r, hitable *world, int depth) {
 
@@ -50,9 +50,9 @@ int main() {
   hitable *objects[4];
 
   // creates two spheres
-  objects[0] = new sphere(vec3(1, 0, -1), 0.5, new metal(vec3(1.0, 1.0, 1.0)));
+  objects[0] = new sphere(vec3(1, 0, -1), 0.5, new metal(vec3(1.0, 1.0, 1.0), 0.3));
   objects[1] = new sphere(vec3(0, -100.5, -1), 100, new lambertian(vec3(0.8, 0.8, 0.0)));
-  objects[2] = new sphere(vec3(-1, 0, -1), 0.5, new metal(vec3(0.0, 0.0, 0.5)));
+  objects[2] = new sphere(vec3(-1, 0, -1), 0.5, new metal(vec3(0.0, 0.0, 0.5), 0.6));
   objects[3] = new sphere(vec3(0, 0, -1), 0.5, new lambertian(vec3(0.15, 0.15, 0.15)));
 
   hitable *world = new hitable_list(objects, 4);
